@@ -452,8 +452,8 @@ is
          Self.Peripheral.IDR := (TXBUFE => True, others => <>);
          Self.Peripheral.PTCR.TXTDIS := True;
 
-         Self.Buffer.Bytes := Self.Buffer.Size;
-         Self.Buffer.State := Success;
+         Self.Buffer.Transferred := Self.Buffer.Size;
+         Self.Buffer.State       := Success;
 
          if Self.Next <= Self.Buffers'Last then
             --  Initiate transmission of the next buffer.
@@ -1226,8 +1226,8 @@ is
       Self.Buffers := Buffers'Unrestricted_Access;
 
       for Descriptor of Self.Buffers.all loop
-         Descriptor.Bytes := 0;
-         Descriptor.State := Active;
+         Descriptor.Transferred := 0;
+         Descriptor.State       := Active;
       end loop;
 
       Self.Next := Self.Buffers'First;

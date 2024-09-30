@@ -131,7 +131,7 @@ is
 
       declare
          Aux : constant A0B.ATSAM3X8E.SVD.TWI.TWI0_SR_Register :=
-           Self.Peripheral.SR;
+           Self.Peripheral.SR with Unreferenced;
          --  Dummy read to clear status.
 
       begin
@@ -377,7 +377,7 @@ is
 
       Status : constant A0B.ATSAM3X8E.SVD.TWI.TWI0_SR_Register :=
         Self.Peripheral.SR;
-      Mask   : constant A0B.ATSAM3X8E.SVD.twi.TWI0_IMR_Register :=
+      Mask   : constant A0B.ATSAM3X8E.SVD.TWI.TWI0_IMR_Register :=
         Self.Peripheral.IMR;
       Size   : A0B.Types.Unsigned_32;
 
@@ -855,7 +855,6 @@ is
       --        end case;
       end if;
 
-
 --        --  if Status.TXIS and Mask.TXIE then
 --        --  if Status.TXIS and not Self.Peripheral.CR2.RD_WRN then
 --        if Status.TXIS then
@@ -1036,6 +1035,24 @@ is
 --        --  Self.Controller.Peripheral.CR1.TCIE := True;
    end Read;
 
+   -----------
+   -- Start --
+   -----------
+
+   overriding procedure Start
+     (Self    : in out Master_Controller;
+      Device  : not null I2C_Device_Driver_Access;
+      Success : in out Boolean) is
+   begin
+      Device_Locks.Acquire (Self.Device_Lock, Device, Success);
+
+      if not Success then
+         return;
+      end if;
+
+--        Self.Configure_Target_Address;
+   end Start;
+
    ----------
    -- Stop --
    ----------
@@ -1089,24 +1106,6 @@ is
 --        --  null;
 --        --  raise Program_Error;
    end Stop;
-
-   -----------
-   -- Start --
-   -----------
-
-   overriding procedure Start
-     (Self    : in out Master_Controller;
-      Device  : not null I2C_Device_Driver_Access;
-      Success : in out Boolean) is
-   begin
-      Device_Locks.Acquire (Self.Device_Lock, Device, Success);
-
-      if not Success then
-         return;
-      end if;
-
---        Self.Configure_Target_Address;
-   end Start;
 
 --     -----------
 --     -- Write --

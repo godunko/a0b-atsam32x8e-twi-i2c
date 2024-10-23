@@ -14,6 +14,5 @@ project-files = ["gnat/a0b_atsam3x8e_twi_i2c.gpr"]
 disabled = true
 
 [[depends-on]]
-a0b_base = "*"
 a0b_i2c = "*"
 a0b_atsam3x8e_gpio = "*"
